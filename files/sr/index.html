@@ -38,11 +38,16 @@
 
 		<script>
 			window.addEventListener("load", function () {
-				UnityLoader.instantiate(
+				var gameInstance = UnityLoader.instantiate(
 					"gameContainer",
-					"/files/sr/SnowRider3D-gd-1.json",
+					"SnowRider3D-gd-1.json",
 					{
-						onProgress: UnityProgress
+						onProgress: UnityProgress,
+						Module: {
+							onRuntimeInitialized: function () {
+								UnityProgress(gameInstance, "complete");
+							}
+						}
 					}
 				);
 			});
