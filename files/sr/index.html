@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<base href="https://cdn.jsdelivr.net/gh/qulearning/qulearning.github.io@main/files/sr/">
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
@@ -16,16 +15,15 @@
 				overflow: hidden;
 				background: #000;
 			}
-
-			.webgl-content {
-				width: 100%;
-				height: 100%;
-			}
-
-			#gameContainer {
-				width: 100%;
-				height: 100%;
-				margin: 0;
+			.webgl-content { width: 100%; height: 100%; }
+			#gameContainer { width: 100%; height: 100%; margin: 0; }
+			#loadingBar {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				color: white;
+				font-family: sans-serif;
 			}
 		</style>
 		<script src="UnityProgress.js" defer></script>
@@ -34,25 +32,32 @@
 	<body>
 		<div class="webgl-content">
 			<div id="gameContainer"></div>
+			<div id="loadingBar">Loading... 0%</div>
 		</div>
 
 		<script>
-		window.addEventListener("load", function () {
-		    var gameInstance = UnityLoader.instantiate(
-		        "gameContainer",
-		        "SnowRider3D-gd-1.json",
-		        {
-		            onProgress: function(unityInstance, progress) {
-		                UnityProgress(unityInstance, progress);
-		                if (progress == 1) {
-		                    document.getElementById("gameContainer").querySelector("canvas").style.display = "block";
-		                    var loadingScreen = document.getElementById("gameContainer").querySelector("div");
-		                    if (loadingScreen) loadingScreen.style.display = "none";
-		                }
-		            }
-		        }
-		    );
-		});
+			window.addEventListener("load", function () {
+				var loadingBar = document.getElementById("loadingBar");
+				var gameInstance = UnityLoader.instantiate(
+					"gameContainer",
+					"SnowRider3D-gd-1.json",
+					{
+						onProgress: function(unityInstance, progress) {
+							if (progress < 1) {
+								loadingBar.textContent = "Loading... " + Math.floor(progress * 100) + "%";
+							} else {
+								loadingBar.style.display = "none";
+							}
+							if (typeof UnityProgress === "function") {
+								UnityProgress(unityInstance, progress);
+							}
+						},
+						Module: {
+							onRuntimeInitialized: function() {}
+						}
+					}
+				);
+			});
 		</script>
 	</body>
 </html>
