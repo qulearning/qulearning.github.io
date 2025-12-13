@@ -37,20 +37,22 @@
 		</div>
 
 		<script>
-			window.addEventListener("load", function () {
-				var gameInstance = UnityLoader.instantiate(
-					"gameContainer",
-					"SnowRider3D-gd-1.json",
-					{
-						onProgress: UnityProgress,
-						Module: {
-							onRuntimeInitialized: function () {
-								UnityProgress(gameInstance, "complete");
-							}
-						}
-					}
-				);
-			});
+		window.addEventListener("load", function () {
+		    var gameInstance = UnityLoader.instantiate(
+		        "gameContainer",
+		        "SnowRider3D-gd-1.json",
+		        {
+		            onProgress: function(unityInstance, progress) {
+		                UnityProgress(unityInstance, progress);
+		                if (progress == 1) {
+		                    document.getElementById("gameContainer").querySelector("canvas").style.display = "block";
+		                    var loadingScreen = document.getElementById("gameContainer").querySelector("div");
+		                    if (loadingScreen) loadingScreen.style.display = "none";
+		                }
+		            }
+		        }
+		    );
+		});
 		</script>
 	</body>
 </html>
