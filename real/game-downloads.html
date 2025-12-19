@@ -13,55 +13,27 @@
 
             <div class="content">
                 <script>
-                    const swCode = `
-                    const CACHE_NAME = 'universal-cache-v1';
+                if ('serviceWorker' in navigator) {
+                    window.addEventListener('load', async () => {
+                        try {
+                            const registration = await navigator.serviceWorker.register('sw.js');
+                            console.log('Service Worker registered');
 
-                    async function cacheFiles(files) {
-                        const cache = await caches.open(CACHE_NAME);
-                        for (const url of files) {
-                            try {
-                                const match = await cache.match(url);
-                                if (!match) {
-                                    await cache.add(url);
-                                    console.log('Cached:', url);
-                                }
-                            } catch(e) {
-                                console.error('Failed to cache', url, e);
-                            }
-                        }
-                    }
+                            await navigator.serviceWorker.ready;
 
-                    self.addEventListener('message', e => {
-                        if (e.data?.type === 'CACHE_FILES' && Array.isArray(e.data.files)) {
-                            cacheFiles(e.data.files);
+                            document.querySelectorAll('button[data-cache]').forEach(btn => {
+                                btn.addEventListener('click', () => {
+                                    const files = JSON.parse(btn.dataset.cache);
+                                    registration.active?.postMessage({ type: 'CACHE_FILES', files });
+                                    console.log('Sent files to Service Worker for caching:', files);
+                                });
+                            });
+
+                        } catch(e) {
+                            console.error('SW registration failed:', e);
                         }
                     });
-
-                    self.addEventListener('fetch', e => {
-                        e.respondWith(caches.match(e.request).then(resp => resp || fetch(e.request)));
-                    });
-                    `;
-
-                    const swBlob = new Blob([swCode], { type: 'application/javascript' });
-                    const swURL = URL.createObjectURL(swBlob);
-
-                    if ('serviceWorker' in navigator) {
-                        window.addEventListener('load', () => {
-                            navigator.serviceWorker.register(swURL)
-                                .then(() => console.log('Service Worker registered'))
-                                .catch(console.error);
-                        });
-                    }
-                    document.querySelectorAll('button[data-cache]').forEach(btn => {
-                        btn.addEventListener('click', async () => {
-                            const files = JSON.parse(btn.dataset.cache);
-                            if ('serviceWorker' in navigator) {
-                                const registration = await navigator.serviceWorker.ready;
-                                registration.active?.postMessage({ type: 'CACHE_FILES', files });
-                                console.log('Sent files to Service Worker for caching:', files);
-                            }
-                        });
-                    });
+                }
                 </script>
 
                 <h2>Geometry Dash</h2>
