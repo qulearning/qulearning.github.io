@@ -16,7 +16,6 @@
 
                 <div class="button-group">
                     <button onclick="loadGame('/files/gd/')">Geometry Dash</button>
-                    <button onclick="loadGame('/files/gd_sz/')">Geometry Dash Subzero</button>
                     <button onclick="loadGame('/files/dm/')">Drive Mad</button>
                     <button onclick="loadGame('/files/bitlife/')">Bitlife</button>
                 </div>
@@ -28,10 +27,14 @@
                 </div>
 
                 <div class="button-group" style="margin-top: 15px;">
-                    <button onclick="loadGame('/files/rb/')">Retro Bowl (broken)</button>
+                    <button onclick="loadGame('/files/rb/')">Retro Bowl</button>
                     <button onclick="loadGame('/files/sr/')">Snow Rider</button>
                     <button onclick="loadGame('/files/tu95/')">Tu-95</button>
                 </div>
+
+                <p style="margin-top:15px;">
+                    Notes: Some games may take a while to load. Be patient!
+                </p>
 
                 <div id="game-area" style="margin-top:20px; width:100%; height:70vh;">
                     <iframe
@@ -41,10 +44,6 @@
                         allow="fullscreen">
                     </iframe>
                 </div>
-
-                <p style="margin-top:15px;">
-                    Note: the website version of Snow Rider has some minor bugs. For a more stable version, download Snow Rider and run it locally instead.
-                </p>
             </div>
         </div>
         <script>
