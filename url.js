@@ -1,0 +1,1 @@
+window.location.replace("https://qulearning.github.io");
